@@ -43,7 +43,7 @@ export default function TablaBeneficios({ data, seleccionados, setSeleccionados 
 
         <td className="p-2">
           <span className={
-            b.estado === 'PENDIENTE'
+            b.estado === 'pendiente'
               ? 'bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs'
               : 'bg-green-100 text-green-700 px-2 py-1 rounded text-xs'
           }>

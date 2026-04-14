@@ -6,7 +6,7 @@ export const getBeneficios = (params) => {
 
 // 💰 pagar + exportar
 export const exportarYPagar = (ids) => {
-    console.log(ids)
+
   return api.post('/beneficios/exportar-pagar', { ids }, {
     responseType: 'blob'
   });
