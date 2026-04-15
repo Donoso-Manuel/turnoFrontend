@@ -4,6 +4,7 @@ import './App.css'
 import CargarTurnos from './pages/cargarTurnos';
 import Beneficios from './pages/beneficios';
 import TurnosCorreccion from './pages/TurnosCorreccion';
+import TurnoManual from './pages/TurnoManual';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -13,6 +14,7 @@ function App() {
   <Beneficios />
   <CargarTurnos/>
   <TurnosCorreccion/>
+  <TurnoManual/>
     </>
   )
 }
