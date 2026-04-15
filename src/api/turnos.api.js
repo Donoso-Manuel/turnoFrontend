@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import api from './axios'
+import api from './axios';
+import * as XLSX from 'xlsx'
 
-const [errores, setErrores] = useState([])
+//const [errores, setErrores] = useState([])
 
 export async function subirExcel(file, forzar =  false) {
     const formData =  new FormData();
@@ -46,4 +47,29 @@ export function validarRut(rutCompleto) {
   else dvFinal = String(dvEsperado);
 
   return dv === dvFinal;
+}
+export function formatearFecha(fecha){
+    if(!fecha) return '';
+
+    const f = new Date(fecha);
+    return f.toLocaleDateString('es-CL');
+}
+export function descargarErroresExcel(errores){
+    if(!errores || errores.length === 0) return;
+
+    const data = errores.map(e =>({
+        RUT: e.rut,
+        NOMBRE: e.nombre,
+        FECHA: formatearFecha(e.fecha),
+        CODIGO_TURNO: e.codigoTurno,
+        HORA_INGRESO: e.horaIngreso,
+        HORA_SALIDA: e.horaSalida,
+        MOTIVO: e.motivo
+    }))
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(wb,ws,'Errores')
+
+    XLSX.writeFile(wb, `errores_carga_${Date.now()}.xlsx`)
 }

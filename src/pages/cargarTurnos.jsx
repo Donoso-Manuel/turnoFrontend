@@ -1,6 +1,7 @@
 import { use, useState } from "react";
-import { subirExcel } from "../api/turnos.api";
+import { subirExcel, formatearFecha, descargarErroresExcel } from "../api/turnos.api";
 import { useRef } from "react";
+import * as XLSX from 'xlsx';
 
 function CargarTurnos() {
 
@@ -9,6 +10,7 @@ function CargarTurnos() {
   const [mensaje, setMensaje] = useState('');
   const [confirmacionPendiente, setConfirmacionPendiente] =  useState(false);
   const fileInputRef = useRef(null);
+  const [errores,setErrores] = useState([])
 
 const handleSubmit = async (forzar = false) => {
   if (!file) {
@@ -19,19 +21,31 @@ const handleSubmit = async (forzar = false) => {
   try {
     setLoading(true);
     setMensaje('');
+    setErrores([]);
 
     const res = await subirExcel(file, forzar);
 
     // 🔥 CASO: requiere confirmación
     if (res.requiereConfirmacion) {
       setMensaje('⚠️ Ya existen datos en este rango. ¿Deseas reemplazarlos?');
-
-      // guardamos flag para mostrar botón
       setConfirmacionPendiente(true);
       return;
     }
 
-    setMensaje(`✔ ${res.totalTurnos} turnos cargados`);
+    const erroresDetectados = res.errores || [];
+
+    setErrores(erroresDetectados);
+
+    if(erroresDetectados.length > 0){
+      descargarErroresExcel(erroresDetectados)
+    }
+
+    if(res.errores && res.errores.length > 0){
+      setMensaje(`✔${res.totalTurnos} turnos cargados con ${res.errores.length} errores`);
+    }else{
+      setMensaje(`✔ ${res.totalTurnos} Turnos cargados correctamente`)
+    }
+
     setConfirmacionPendiente(false);
     setFile(null)
     if(fileInputRef.current){
@@ -82,6 +96,35 @@ const handleSubmit = async (forzar = false) => {
         {mensaje && (
           <p className="mt-4 text-center text-sm text-gray-700">
           {mensaje}
+          {errores.length > 0 && (
+            <div className="mt-4 bg-red-50 border border-red-200 rounded-xl p-4">
+              <h3 className="text-red-700 font-semibold mb-2">
+                Se detectaron [errores.length] errores
+              </h3>
+              <div className="max-h-60 overflow-y-auto">
+                <table className="w-full text-sm">
+                  <thead className="text-left text-red-800 border-b">
+                    <tr>
+                      <th className="py-1">RUT</th>
+                      <th>Nombre</th>
+                      <th>Fecha</th>
+                      <th>Motivo</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {errores.map((e, i)=>(
+                      <tr key={i} className="border-b last:border-0">
+                        <td>{e.rut}</td>
+                        <td>{e.nombre}</td>
+                        <td>{formatearFecha(e.fecha)}</td>
+                        <td className="text-red-600 font-medium">{e.motivo}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )};
           </p>
         )}
       </div>
