@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../api/axios';
 import { exportar } from '../api/beneficios';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoteDetalle() {
 
+  const navigate = useNavigate();
   const { lote } = useParams();
 
   const [data, setData] = useState([]);
@@ -25,6 +27,9 @@ export default function LoteDetalle() {
   return (
     <div className="p-6">
       <div className="bg-white rounded-xl shadow">
+      <button onClick={()=> navigate('/lotes')} className="mb-4 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg">
+        Volver A Lotes
+      </button>
         <div className='flex justify-between mb-4'>
             <h1 className='text-2xl font-bold'>
                 Detalle Lote: {lote}

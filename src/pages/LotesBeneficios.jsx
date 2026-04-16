@@ -34,6 +34,10 @@ export default function LotesBeneficios() {
   };
 
   return (
+    <>
+    <button onClick={()=> navigate('/')} className="mb-4 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg">
+      Volver Al Dashboard
+    </button>
     <div className="p-6">
 
       <h1 className="text-2xl font-bold mb-4">
@@ -87,5 +91,6 @@ export default function LotesBeneficios() {
 
       </div>
     </div>
+    </>
   );
 }

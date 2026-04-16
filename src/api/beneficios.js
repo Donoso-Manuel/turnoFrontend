@@ -13,11 +13,11 @@ export const exportarYPagar = (ids) => {
 };
 export const exportar = async(lote)=>{
   try{
-    const response = await api.get(`/beneficios/lotes/${lote}`,
+    const response = await api.get(`/beneficios/lotes/${lote}/exportar`,
       {responseType: 'blob'}
     );
 
-    const url = window.URL.createObjectURL(new Blob([response.data]))
+    const url = window.URL.createObjectURL(response.data);
     const link = document.createElement('a')
 
     link.href= url;
@@ -29,4 +29,11 @@ export const exportar = async(lote)=>{
     console.error(error)
     alert('Error al exportar')
   }
+}
+export const exportarBeneficios = async(params) =>{
+  const response = await api.get('/beneficios/exportar-beneficios',{
+    params,
+    responseType: 'blob'
+  });
+  return response.data;
 }

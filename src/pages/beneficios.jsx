@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react';
-import { getBeneficios, exportarYPagar } from '../api/beneficios';
+import { getBeneficios, exportarYPagar, exportarBeneficios } from '../api/beneficios';
 import TablaBeneficios from '../components/tablaBeneficios';
+import { construirFechas } from '../api/helper';
+import { useNavigate } from 'react-router-dom';
 
 export default function Beneficios() {
 
+  const navigate = useNavigate();
   const [beneficios, setBeneficios] = useState([]);
   const [seleccionados, setSeleccionados] = useState([]);
   const [year, setYear] = useState(new Date().getFullYear());
+  const [mes, setMes] = useState('');
   const [estado,setEstado] = useState(''); 
   const [rut, setRut] = useState('');
   const [loading,setLoading] =  useState(false);
@@ -33,8 +37,7 @@ const cargar = async () => {
   setLoading(true);
 
   try {
-    const desde = `${year}-01-01`;
-    const hasta = `${year}-12-31`;
+    const {desde, hasta} = construirFechas(year,mes) 
 
     const res = await getBeneficios({
       desde,
@@ -52,11 +55,6 @@ const cargar = async () => {
     setLoading(false);
   }
 };
-
-  useEffect(() => {
-    cargar();
-  }, [year]);
-
 const manejarPago = async () => {
   if (seleccionados.length === 0) return;
 
@@ -95,13 +93,41 @@ const manejarPago = async () => {
     setLoadingPago(false);
   }
 };
+const handleExportar = async () => {
+  try {
+    const { desde, hasta } = construirFechas(year, mes);
+
+    const blob = await exportarBeneficios({
+      desde,
+      hasta,
+      estado,
+      rut,
+      exportar: true
+    });
+
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.setAttribute('download', 'beneficios.xlsx');
+
+    document.body.appendChild(link);
+    link.click();
+
+  } catch (error) {
+    console.error(error);
+    alert('Error al exportar');
+  }
+};
 
   return (
     
   <div className="p-6 bg-gray-50 min-h-screen">
 
     <div className="max-w-7xl mx-auto">
-
+    <button onClick={()=> navigate('/')} className="mb-4 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg">
+      Volver Al Dashboard
+    </button>
       {/* HEADER */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-800">
@@ -126,6 +152,24 @@ const manejarPago = async () => {
             {[2023, 2024, 2025, 2026].map(y => (
               <option key={y} value={y}>{y}</option>
             ))}
+          </select>
+        </div>
+        <div>
+          <label className='text-sm text-gray-500'>Mes</label>
+          <select value={mes} onChange={(e)=> setMes(e.target.value)} className='block border rounded-lg p-2'>
+            <option value="">Todos</option>
+            <option value="1">Enero</option>
+            <option value="2">Febrero</option>
+            <option value="3">Marzo</option>
+            <option value="4">Abril</option>
+            <option value="5">Mayo</option>
+            <option value="6">Junio</option>
+            <option value="7">Julio</option>
+            <option value="8">Agosto</option>
+            <option value="9">Septiembre</option>
+            <option value="10">Octubre</option>
+            <option value="11">Noviembre</option>
+            <option value="12">Diciembre</option>
           </select>
         </div>
 
@@ -203,6 +247,9 @@ const manejarPago = async () => {
   )}
 
   {loadingPago ? 'Procesando...' : `Pagar y Exportar (${seleccionados.length})`}
+</button>
+<button onClick={handleExportar} className='bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg'>
+  Exportar Seleccion
 </button>
 <div className="flex justify-center mt-6 gap-2">
 

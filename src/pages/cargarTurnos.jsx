@@ -2,9 +2,11 @@ import { use, useState } from "react";
 import { subirExcel, formatearFecha, descargarErroresExcel } from "../api/turnos.api";
 import { useRef } from "react";
 import * as XLSX from 'xlsx';
+import { useNavigate } from "react-router-dom";
 
 function CargarTurnos() {
 
+  const navigate = useNavigate();
   const [file, setFile] = useState(null);
   const [loading, setLoading] =  useState(false);
   const [mensaje, setMensaje] = useState('');
@@ -62,7 +64,9 @@ const handleSubmit = async (forzar = false) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-      
+    <button onClick={()=> navigate('/')} className="mb-4 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg">
+      Volver Al Dashboard
+    </button>
       <div className="bg-white/80 backdrop-blur-md shadow-2xl rounded-3xl p-10 w-full max-w-md border border-gray-200">
 
         <h1 className="text-3xl font-semibold text-gray-800 mb-6 text-center">

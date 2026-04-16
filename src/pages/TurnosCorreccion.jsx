@@ -1,5 +1,6 @@
 import { use, useState } from "react";
 import  api from "../api/axios"
+import { useNavigate } from "react-router-dom";
 
 const hoy = () => {
   const d = new Date();
@@ -14,7 +15,7 @@ export default function TurnosCorreccion() {
   const [turnos, setTurnos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [guardandoId, setGuardandoId] = useState(null);
-
+  const navigate = useNavigate();
   const fechasValidas = desde && hasta && desde <= hasta;
   const puedeBuscar = rut.trim() !== '' && fechasValidas;
 
@@ -73,6 +74,9 @@ export default function TurnosCorreccion() {
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
+    <button onClick={()=> navigate('/')} className="mb-4 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg">
+      Volver Al Dashboard
+    </button>
 
       <div className="max-w-6xl mx-auto bg-white p-6 rounded-xl shadow">
 
