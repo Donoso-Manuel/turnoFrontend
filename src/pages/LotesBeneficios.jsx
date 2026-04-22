@@ -33,52 +33,89 @@ export default function LotesBeneficios() {
     }
   };
 
-  return (
-    <>
-    <button onClick={()=> navigate('/')} className="mb-4 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg">
-      Volver Al Dashboard
-    </button>
-    <div className="p-6">
+return (
+  <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 text-gray-100">
 
-      <h1 className="text-2xl font-bold mb-4">
+    <div className="max-w-6xl mx-auto">
+
+      {/* VOLVER */}
+      <button
+        onClick={() => navigate('/')}
+        className="mb-6 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20"
+      >
+        ← Volver al Dashboard
+      </button>
+
+      {/* HEADER */}
+      <h1 className="text-2xl font-semibold mb-6">
         Lotes de Pago
       </h1>
 
-      <div className="bg-white rounded-xl shadow">
-        <div className='flex gap-2 mb-4'>
-            <input type='date' value={desde} onChange={(e)=> setDesde(e.target.value)} className='border rounded px-2 py-1'/>
-            <input type='date' value={hasta} onChange={(e)=> setHasta(e.target.value)} className='border roinded px-2 py-1'/>
-            <button onClick={cargarLotes} className='bg-blue-600 text-white px-3 py-1 rounded'>
-                Filtrar
-            </button>
+      {/* FILTROS */}
+      <div className="rounded-2xl p-[1px] bg-gradient-to-r from-indigo-500 to-purple-500 mb-6">
+        <div className="bg-gray-900 rounded-2xl p-4 flex gap-3 items-center">
+
+          <input
+            type="date"
+            value={desde}
+            onChange={(e) => setDesde(e.target.value)}
+            className="bg-gray-800 border border-gray-700 rounded-lg px-2 py-1"
+          />
+
+          <input
+            type="date"
+            value={hasta}
+            onChange={(e) => setHasta(e.target.value)}
+            className="bg-gray-800 border border-gray-700 rounded-lg px-2 py-1"
+          />
+
+          <button
+            onClick={cargarLotes}
+            className="px-4 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700"
+          >
+            Filtrar
+          </button>
+
         </div>
+      </div>
+
+      {/* TABLA */}
+      <div className="bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl overflow-hidden">
+
         <table className="w-full text-sm">
 
-          <thead className="bg-gray-100 text-gray-700">
+          <thead className="bg-gray-800 text-gray-300">
             <tr>
-              <th className="p-2">Lote</th>
-              <th>Cantidad</th>
-              <th>Fecha Pago</th>
-              <th>Acciones</th>
+              <th className="p-3 text-left">Lote</th>
+              <th className="p-3 text-left">Cantidad</th>
+              <th className="p-3 text-left">Fecha Pago</th>
+              <th className="p-3 text-left">Acciones</th>
             </tr>
           </thead>
 
           <tbody>
-            {lotes.map((lote) => (
-              <tr key={lote.lote_pago} className="border-t">
-
-                <td className="p-2 font-medium">
-                  {lote.lote_pago}
+            {lotes.map((l) => (
+              <tr
+                key={l.lote_pago}
+                className="border-t border-gray-800 hover:bg-gray-800 transition"
+              >
+                <td className="p-3 text-indigo-400 font-semibold">
+                  {l.lote_pago}
                 </td>
 
-                <td>{lote.cantidad}</td>
-
-                <td>
-                  {new Date(lote.fecha_pago).toLocaleDateString('es-CL')}
+                <td className="p-3 text-gray-300">
+                  {l.cantidad}
                 </td>
 
-                <td>
-                  <button onClick={()=> navigate(`/lotes/${lote.lote_pago}`)} className="text-blue-600 hover:underline">
+                <td className="p-3 text-gray-400">
+                  {new Date(l.fecha_pago).toLocaleDateString('es-CL')}
+                </td>
+
+                <td className="p-3">
+                  <button
+                    onClick={() => navigate(`/lotes/${l.lote_pago}`)}
+                    className="text-indigo-400 hover:underline"
+                  >
                     Ver detalle
                   </button>
                 </td>
@@ -90,7 +127,8 @@ export default function LotesBeneficios() {
         </table>
 
       </div>
+
     </div>
-    </>
-  );
+  </div>
+);
 }

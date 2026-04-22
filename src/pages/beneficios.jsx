@@ -120,168 +120,183 @@ const handleExportar = async () => {
   }
 };
 
-  return (
-    
-  <div className="p-6 bg-gray-50 min-h-screen">
+return (
+  <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100 p-6">
 
     <div className="max-w-7xl mx-auto">
-    <button onClick={()=> navigate('/')} className="mb-4 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg">
-      Volver Al Dashboard
-    </button>
+
+      {/* VOLVER */}
+      <button
+        onClick={() => navigate('/')}
+        className="mb-6 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur transition"
+      >
+        ← Volver al Dashboard
+      </button>
+
       {/* HEADER */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">
+      <div className="mb-8">
+        <h1 className="text-3xl font-semibold">
           Gestión de Beneficios
         </h1>
-        <p className="text-gray-500">
+        <p className="text-gray-400 text-sm">
           Administración, filtros y pago de beneficios
         </p>
       </div>
 
       {/* FILTROS */}
-      <div className="bg-white p-4 rounded-2xl shadow mb-6 flex flex-wrap gap-4 items-end">
+      <div className="rounded-2xl p-[1px] bg-gradient-to-r from-indigo-500 to-purple-500 mb-6">
+        <div className="bg-gray-900 rounded-2xl p-4 flex flex-wrap gap-4 items-end">
 
-        {/* Año */}
-        <div>
-          <label className="text-sm text-gray-500">Año</label>
-          <select
-            value={year}
-            onChange={(e) => setYear(e.target.value)}
-            className="block border rounded-lg p-2"
+          <div>
+            <label className="text-xs text-gray-400">Año</label>
+            <select
+              value={year}
+              onChange={(e) => setYear(e.target.value)}
+              className="block bg-gray-800 border border-gray-700 rounded-lg p-2 mt-1"
+            >
+              {[2023, 2024, 2025, 2026].map(y => (
+                <option key={y} value={y}>{y}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="text-xs text-gray-400">Mes</label>
+            <select
+              value={mes}
+              onChange={(e) => setMes(e.target.value)}
+              className="block bg-gray-800 border border-gray-700 rounded-lg p-2 mt-1"
+            >
+              <option value="">Todos</option>
+              {[...Array(12)].map((_, i) => (
+                <option key={i+1} value={i+1}>
+                  {new Date(0, i).toLocaleString('es', { month: 'long' })}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="text-xs text-gray-400">Estado</label>
+            <select
+              onChange={(e) => setEstado(e.target.value)}
+              className="block bg-gray-800 border border-gray-700 rounded-lg p-2 mt-1"
+            >
+              <option value="">Todos</option>
+              <option value="pendiente">Pendientes</option>
+              <option value="PAGADO">Pagados</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="text-xs text-gray-400">RUT</label>
+            <input
+              type="text"
+              placeholder="Buscar..."
+              onChange={(e) => setRut(e.target.value)}
+              className="bg-gray-800 border border-gray-700 rounded-lg p-2 mt-1"
+            />
+          </div>
+
+          <button
+            onClick={cargar}
+            className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 transition"
           >
-            {[2023, 2024, 2025, 2026].map(y => (
-              <option key={y} value={y}>{y}</option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label className='text-sm text-gray-500'>Mes</label>
-          <select value={mes} onChange={(e)=> setMes(e.target.value)} className='block border rounded-lg p-2'>
-            <option value="">Todos</option>
-            <option value="1">Enero</option>
-            <option value="2">Febrero</option>
-            <option value="3">Marzo</option>
-            <option value="4">Abril</option>
-            <option value="5">Mayo</option>
-            <option value="6">Junio</option>
-            <option value="7">Julio</option>
-            <option value="8">Agosto</option>
-            <option value="9">Septiembre</option>
-            <option value="10">Octubre</option>
-            <option value="11">Noviembre</option>
-            <option value="12">Diciembre</option>
-          </select>
-        </div>
+            Buscar
+          </button>
 
-        {/* Estado */}
-        <div>
-          <label className="text-sm text-gray-500">Estado</label>
-          <select
-            onChange={(e) => setEstado(e.target.value)}
-            className="block border rounded-lg p-2"
-          >
-            <option value="">Todos</option>
-            <option value="pendiente">Pendientes</option>
-            <option value="PAGADO">Pagados</option>
-          </select>
         </div>
-
-        {/* Buscar por RUT */}
-        <div>
-          <label className="text-sm text-gray-500">RUT</label>
-          <input
-            type="text"
-            placeholder="Buscar..."
-            onChange={(e) => setRut(e.target.value)}
-            className="border rounded-lg p-2"
-          />
-        </div>
-
-        {/* BOTÓN RECARGAR */}
-        <button
-          onClick={cargar}
-          className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-700"
-        >
-          Buscar
-        </button>
-
       </div>
-    {mensaje && (
-  <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-lg">
-    {mensaje}
-  </div>
-)}
 
-{error && (
-  <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
-    {error}
-  </div>
-)}
+      {/* ALERTAS */}
+      {mensaje && (
+        <div className="mb-4 p-3 bg-green-500/20 text-green-400 rounded-xl border border-green-500/30">
+          {mensaje}
+        </div>
+      )}
+
+      {error && (
+        <div className="mb-4 p-3 bg-red-500/20 text-red-400 rounded-xl border border-red-500/30">
+          {error}
+        </div>
+      )}
+
       {/* TABLA */}
-<div className="bg-white rounded-2xl shadow p-4">
+      <div className="bg-gray-900 rounded-2xl border border-gray-700 shadow-2xl p-4">
 
-  {loading ? (
-<div className="flex justify-center py-10">
-  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-800"></div>
-</div>
-  ) : (
-    <>
-      <TablaBeneficios
-        data={beneficios}
-        seleccionados={seleccionados}
-        setSeleccionados={setSeleccionados}
-      />
+        {loading ? (
+          <div className="flex justify-center py-10">
+            <div className="animate-spin h-8 w-8 border-2 border-indigo-500 border-t-transparent rounded-full"></div>
+          </div>
+        ) : (
+          <>
+            <TablaBeneficios
+              data={beneficios}
+              seleccionados={seleccionados}
+              setSeleccionados={setSeleccionados}
+            />
 
-      <div className="flex justify-between items-center mt-4">
-        <span className="text-sm text-gray-500">
-          {beneficios.length} registros
-        </span>
+            {/* FOOTER */}
+            <div className="flex flex-col md:flex-row justify-between items-center mt-6 gap-4">
 
-<button
-  onClick={manejarPago}
-  disabled={seleccionados.length === 0 || loadingPago}
-  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg disabled:bg-gray-300 flex items-center gap-2"
->
-  {loadingPago && (
-    <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
-  )}
+              <span className="text-sm text-gray-400">
+                {beneficios.length} registros
+              </span>
 
-  {loadingPago ? 'Procesando...' : `Pagar y Exportar (${seleccionados.length})`}
-</button>
-<button onClick={handleExportar} className='bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg'>
-  Exportar Seleccion
-</button>
-<div className="flex justify-center mt-6 gap-2">
+              <div className="flex gap-2">
 
-  <button
-    onClick={() => setPage(page - 1)}
-    disabled={page === 1}
-    className="px-3 py-1 border rounded disabled:opacity-50"
-  >
-    ←
-  </button>
+                <button
+                  onClick={manejarPago}
+                  disabled={seleccionados.length === 0 || loadingPago}
+                  className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-600 flex items-center gap-2"
+                >
+                  {loadingPago && (
+                    <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+                  )}
+                  Pagar ({seleccionados.length})
+                </button>
 
-  <span className="px-3 py-1">
-    Página {page} de {totalPaginas}
-  </span>
+                <button
+                  onClick={handleExportar}
+                  className="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700"
+                >
+                  Exportar
+                </button>
 
-  <button
-    onClick={() => setPage(page + 1)}
-    disabled={page === totalPaginas}
-    className="px-3 py-1 border rounded disabled:opacity-50"
-  >
-    →
-  </button>
+              </div>
 
-</div>
+              {/* PAGINACIÓN */}
+              <div className="flex gap-2 items-center">
+
+                <button
+                  onClick={() => setPage(page - 1)}
+                  disabled={page === 1}
+                  className="px-3 py-1 bg-gray-800 rounded disabled:opacity-40"
+                >
+                  ←
+                </button>
+
+                <span className="text-sm text-gray-400">
+                  {page} / {totalPaginas}
+                </span>
+
+                <button
+                  onClick={() => setPage(page + 1)}
+                  disabled={page === totalPaginas}
+                  className="px-3 py-1 bg-gray-800 rounded disabled:opacity-40"
+                >
+                  →
+                </button>
+
+              </div>
+
+            </div>
+          </>
+        )}
+
       </div>
-    </>
-  )}
-
-</div>
 
     </div>
-
   </div>
 );
 }

@@ -72,112 +72,132 @@ export default function TurnosCorreccion() {
     }
   };
 
-  return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-    <button onClick={()=> navigate('/')} className="mb-4 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg">
-      Volver Al Dashboard
-    </button>
+return (
+  <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 text-gray-100">
 
-      <div className="max-w-6xl mx-auto bg-white p-6 rounded-xl shadow">
+    <div className="max-w-6xl mx-auto">
 
-        <h2 className="text-xl font-bold mb-4">Corrección de Turnos</h2>
+      {/* VOLVER */}
+      <button
+        onClick={() => navigate('/')}
+        className="mb-6 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20"
+      >
+        ← Volver al Dashboard
+      </button>
 
-        {/* 🔎 FILTROS */}
-        <div className="flex gap-2 mb-4 flex-wrap">
+      {/* HEADER */}
+      <div className="mb-6">
+        <h2 className="text-2xl font-semibold">
+          Corrección de Turnos
+        </h2>
+        <p className="text-gray-400 text-sm">
+          Ajuste manual de horarios y recalculo automático
+        </p>
+      </div>
+
+      {/* FILTROS */}
+      <div className="rounded-2xl p-[1px] bg-gradient-to-r from-indigo-500 to-purple-500 mb-6">
+        <div className="bg-gray-900 rounded-2xl p-4 flex flex-wrap gap-3 items-center">
 
           <input
             placeholder="RUT"
             value={rut}
             onChange={(e) => setRut(e.target.value)}
-            className="border p-2 rounded w-40"
+            className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 w-40"
           />
 
           <input
             type="date"
             value={desde}
             onChange={(e) => setDesde(e.target.value)}
-            className="border p-2 rounded"
+            className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2"
           />
 
           <input
             type="date"
             value={hasta}
             onChange={(e) => setHasta(e.target.value)}
-            className="border p-2 rounded"
+            className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2"
           />
 
           <button
             onClick={buscarTurnos}
             disabled={!puedeBuscar || loading}
-            className="bg-blue-600 text-white px-4 py-2 rounded disabled:bg-gray-300"
+            className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-600"
           >
             {loading ? 'Buscando...' : 'Buscar'}
           </button>
 
         </div>
+      </div>
 
-        {/* ⚠️ VALIDACIÓN */}
-        {!fechasValidas && (
-          <p className="text-red-500 mb-2">
-            La fecha "desde" no puede ser mayor que "hasta"
-          </p>
-        )}
+      {/* VALIDACIÓN */}
+      {!fechasValidas && (
+        <div className="mb-4 p-3 bg-red-500/20 text-red-400 border border-red-500/30 rounded-xl">
+          La fecha "desde" no puede ser mayor que "hasta"
+        </div>
+      )}
 
-        {/* 📋 TABLA */}
-        <table className="w-full border text-sm">
+      {/* TABLA */}
+      <div className="bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl overflow-hidden">
 
-          <thead className="bg-gray-100 text-gray-700">
+        <table className="w-full text-sm">
+
+          <thead className="bg-gray-800 text-gray-300">
             <tr>
-              <th className="p-2">Fecha</th>
-              <th className="p-2">Turno</th>
-              <th className="p-2">Ingreso</th>
-              <th className="p-2">Salida</th>
-              <th className="p-2">Noche</th>
-              <th className="p-2">Acción</th>
+              <th className="p-3 text-left">Fecha</th>
+              <th className="p-3 text-left">Turno</th>
+              <th className="p-3 text-left">Ingreso</th>
+              <th className="p-3 text-left">Salida</th>
+              <th className="p-3 text-center">Noche</th>
+              <th className="p-3 text-left">Acción</th>
             </tr>
           </thead>
 
           <tbody>
             {turnos.map(t => (
-              <tr key={t.id} className="border-t">
+              <tr
+                key={t.id}
+                className="border-t border-gray-800 hover:bg-gray-800/70 transition"
+              >
 
-                <td className="p-2">
+                <td className="p-3 text-gray-300">
                   {t.fecha?.split('T')[0]}
                 </td>
 
-                <td className="p-2">
+                <td className="p-3 text-indigo-400 font-semibold">
                   {t.codigo_turno}
                 </td>
 
-                <td className="p-2">
+                <td className="p-3">
                   <input
                     value={t.hora_ingreso_edit}
                     onChange={(e) =>
                       handleChange(t.id, 'hora_ingreso_edit', e.target.value)
                     }
-                    className="border p-1 rounded w-20"
+                    className="bg-gray-800 border border-gray-700 rounded-lg px-2 py-1 w-24 focus:ring-2 focus:ring-indigo-500"
                   />
                 </td>
 
-                <td className="p-2">
+                <td className="p-3">
                   <input
                     value={t.hora_salida_edit}
                     onChange={(e) =>
                       handleChange(t.id, 'hora_salida_edit', e.target.value)
                     }
-                    className="border p-1 rounded w-20"
+                    className="bg-gray-800 border border-gray-700 rounded-lg px-2 py-1 w-24 focus:ring-2 focus:ring-indigo-500"
                   />
                 </td>
 
-                <td className="p-2 text-center">
+                <td className="p-3 text-center text-xl">
                   {t.es_noche ? '🌙' : '☀️'}
                 </td>
 
-                <td className="p-2">
+                <td className="p-3">
                   <button
                     onClick={() => guardarTurno(t)}
                     disabled={guardandoId === t.id}
-                    className="bg-green-600 text-white px-3 py-1 rounded disabled:bg-gray-300"
+                    className="px-3 py-1 rounded-lg bg-green-600 hover:bg-green-700 disabled:bg-gray-600"
                   >
                     {guardandoId === t.id ? 'Guardando...' : 'Guardar'}
                   </button>
@@ -190,6 +210,8 @@ export default function TurnosCorreccion() {
         </table>
 
       </div>
+
     </div>
-  );
+  </div>
+);
 }

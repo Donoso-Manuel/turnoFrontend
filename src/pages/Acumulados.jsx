@@ -30,61 +30,93 @@ export default function Acumulados() {
     link.click();
   };
 
-  return (
-    <>
-    <button onClick={()=> navigate('/')} className="mb-4 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg">
-      Volver Al Dashboard
-    </button>
-    <div className="p-6">
+return (
+  <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100 p-6">
 
-      <h1 className="text-2xl font-bold mb-4">
-        Reporte de Acumulados
-      </h1>
+    <div className="max-w-6xl mx-auto">
 
-      <div className="flex gap-2 mb-4">
-        <input
-          placeholder="Filtrar por RUT"
-          onChange={(e) => setRut(e.target.value)}
-          className="border p-2 rounded"
-        />
+      {/* VOLVER */}
+      <button
+        onClick={() => navigate('/')}
+        className="mb-6 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur transition"
+      >
+        ← Volver al Dashboard
+      </button>
 
-        <button
-          onClick={cargar}
-          className="bg-gray-800 text-white px-4 py-2 rounded"
-        >
-          Buscar
-        </button>
-
-        <button
-          onClick={handleExportar}
-          className="bg-green-600 text-white px-4 py-2 rounded"
-        >
-          Exportar
-        </button>
+      {/* HEADER */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-semibold">
+          Reporte de Acumulados
+        </h1>
+        <p className="text-gray-400 text-sm">
+          Consulta y exportación de noches acumuladas
+        </p>
       </div>
 
-      <table className="w-full border">
-        <thead className="bg-gray-100">
-          <tr>
-            <th>RUT</th>
-            <th>Nombre</th>
-            <th>Noches</th>
-            <th>Última Fecha</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((d, i) => (
-            <tr key={i}>
-              <td>{d.rut}</td>
-              <td>{d.nombre}</td>
-              <td>{d.noches_acumuladas}</td>
-              <td>{d.ultima_fecha?.split('T')[0]}</td>
+      {/* FILTROS */}
+      <div className="rounded-2xl p-[1px] bg-gradient-to-r from-indigo-500 to-purple-500 mb-6">
+        <div className="bg-gray-900 rounded-2xl p-4 flex flex-wrap gap-3 items-center">
+
+          <input
+            placeholder="Filtrar por RUT"
+            onChange={(e) => setRut(e.target.value)}
+            className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 outline-none"
+          />
+
+          <button
+            onClick={cargar}
+            className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 transition"
+          >
+            Buscar
+          </button>
+
+          <button
+            onClick={handleExportar}
+            className="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 transition"
+          >
+            Exportar
+          </button>
+
+        </div>
+      </div>
+
+      {/* TABLA */}
+      <div className="rounded-2xl overflow-hidden shadow-2xl border border-gray-700">
+
+        <table className="w-full text-sm">
+
+          <thead className="bg-gray-800 text-gray-300">
+            <tr>
+              <th className="p-3 text-left">RUT</th>
+              <th className="p-3 text-left">Nombre</th>
+              <th className="p-3 text-left">Noches</th>
+              <th className="p-3 text-left">Última Fecha</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody className="bg-gray-900">
+            {data.map((d, i) => (
+              <tr
+                key={i}
+                className="border-t border-gray-800 hover:bg-gray-800 transition"
+              >
+                <td className="p-3 font-medium">{d.rut}</td>
+                <td className="p-3 text-gray-300">{d.nombre}</td>
+                <td className="p-3 text-indigo-400 font-semibold">
+                  {d.noches_acumuladas}
+                </td>
+                <td className="p-3 text-gray-400">
+                  {d.ultima_fecha?.split('T')[0]}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+
+        </table>
+
+      </div>
 
     </div>
-    </>
-  );
+  </div>
+);
 }

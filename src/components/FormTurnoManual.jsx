@@ -71,105 +71,79 @@ export default function FormTurnoManual(){
         }
     };
     return(
-        <div className="bg-white p-6 rounded-2xl shadow-md max-w-xl">
+<div className="rounded-2xl p-[1px] bg-gradient-to-r from-indigo-500 to-purple-500 shadow-lg">
 
-      <h2 className="text-xl font-bold mb-4">
-        Ingreso Manual de Turno
-      </h2>
+  <div className="bg-white rounded-2xl p-6 max-w-xl">
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <h2 className="text-xl font-semibold text-gray-800 mb-5">
+      Ingreso Manual de Turno
+    </h2>
 
-        {/* RUT */}
+    <form onSubmit={handleSubmit} className="space-y-4">
+
+      <input
+        type="text"
+        name="rut"
+        placeholder="RUT (12345678-9)"
+        value={form.rut}
+        onChange={handleRutChange}
+        className={`w-full rounded-xl px-3 py-2 bg-gray-50 border transition focus:outline-none ${
+          rutValido
+            ? 'border-gray-200 focus:ring-2 focus:ring-indigo-400'
+            : 'border-red-400 focus:ring-2 focus:ring-red-400'
+        }`}
+      />
+
+      <input
+        type="text"
+        name="nombre"
+        placeholder="Nombre"
+        value={form.nombre}
+        onChange={handleChange}
+        className="w-full rounded-xl px-3 py-2 bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-indigo-400"
+      />
+
+      <input
+        type="date"
+        name="fecha"
+        value={form.fecha}
+        onChange={handleChange}
+        className="w-full rounded-xl px-3 py-2 bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-indigo-400"
+      />
+
+      <div className="flex gap-3">
         <input
-          type="text"
-          name="rut"
-          placeholder="RUT (12345678-9)"
-          value={form.rut}
-          onChange={handleRutChange}
-          className={`w-full border p-2 rounded ${
-            rutValido ? '' : 'border-red-500'
-            }`}
-        />
-        {!rutValido && (
-        <span className="text-red-500 text-xs">
-        RUT inválido
-        </span>
-        )}
-        {/* Nombre */}
-        <input
-          type="text"
-          name="nombre"
-          placeholder="Nombre"
-          value={form.nombre}
+          type="time"
+          name="horaIngreso"
+          value={form.horaIngreso}
           onChange={handleChange}
-          className="w-full border p-2 rounded"
+          className="w-full rounded-xl px-3 py-2 bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-indigo-400"
         />
 
-        {/* Fecha */}
         <input
-          type="date"
-          name="fecha"
-          value={form.fecha}
+          type="time"
+          name="horaSalida"
+          value={form.horaSalida}
           onChange={handleChange}
-          className="w-full border p-2 rounded"
+          className="w-full rounded-xl px-3 py-2 bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-indigo-400"
         />
+      </div>
 
-        {/* Código turno */}
-        <input
-          type="text"
-          name="codigoTurno"
-          placeholder="Código turno"
-          value={form.codigoTurno}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-        />
+      <button
+        type="submit"
+        disabled={loading || !esValido()}
+        className={`w-full py-2.5 rounded-xl text-white font-medium transition-all ${
+          loading || !esValido()
+            ? 'bg-gray-400'
+            : 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:scale-[1.02] hover:shadow-lg active:scale-95'
+        }`}
+      >
+        {loading ? 'Guardando...' : 'Guardar Turno'}
+      </button>
 
-        {/* Horas */}
-        <div className="flex gap-4">
-          <input
-            type="time"
-            name="horaIngreso"
-            value={form.horaIngreso}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-          />
+    </form>
 
-          <input
-            type="time"
-            name="horaSalida"
-            value={form.horaSalida}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-          />
-        </div>
-
-        {/* BOTÓN */}
-        <button
-          type="submit"
-          disabled={loading || !esValido()}
-          className={`w-full py-2 rounded text-white ${
-            loading || !esValido()
-              ? 'bg-gray-400'
-              : 'bg-blue-600 hover:bg-blue-700'
-          }`}
-        >
-          {loading ? 'Guardando...' : 'Guardar Turno'}
-        </button>
-
-        {/* MENSAJES */}
-        {mensaje && (
-          <div className="text-green-600 text-sm">
-            {mensaje}
-          </div>
-        )}
-
-        {error && (
-          <div className="text-red-600 text-sm">
-            {error}
-          </div>
-        )}
-
-      </form>
-    </div>
+  </div>
+</div>
     )
 }

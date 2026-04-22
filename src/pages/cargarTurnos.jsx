@@ -62,78 +62,95 @@ const handleSubmit = async (forzar = false) => {
 };
 
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-    <button onClick={()=> navigate('/')} className="mb-4 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg">
-      Volver Al Dashboard
-    </button>
-      <div className="bg-white/80 backdrop-blur-md shadow-2xl rounded-3xl p-10 w-full max-w-md border border-gray-200">
+return (
+  <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex flex-col items-center justify-center p-6 text-gray-100">
 
-        <h1 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
+    {/* VOLVER */}
+    <button
+      onClick={() => navigate('/')}
+      className="mb-6 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur transition"
+    >
+      ← Volver al Dashboard
+    </button>
+
+    <div className="w-full max-w-md rounded-2xl p-[1px] bg-gradient-to-r from-indigo-500 to-purple-500 shadow-2xl">
+
+      <div className="bg-gray-900 rounded-2xl p-8">
+
+        <h1 className="text-2xl font-semibold mb-6 text-center">
           Cargar Turnos
         </h1>
 
-        <label className="block text-sm text-gray-600 mb-2">
-          Selecciona archivo Excel
+        {/* INPUT FILE */}
+        <label className="block text-sm text-gray-400 mb-2">
+          Archivo Excel
         </label>
 
         <input
           type="file"
-          onChange={(e)=> setFile(e.target.files[0])}
+          onChange={(e) => setFile(e.target.files[0])}
           ref={fileInputRef}
-          className="w-full text-sm border border-gray-300 rounded-lg p-2 mb-6 cursor-pointer file:mr-3 file:py-1 file:px-3 file:border-0 file:bg-gray-200 file:text-gray-700 hover:file:bg-gray-300"
+          className="w-full text-sm border border-gray-700 rounded-lg p-2 mb-6 bg-gray-800 file:bg-indigo-600 file:text-white file:border-0 file:px-3 file:py-1 file:rounded-lg hover:file:bg-indigo-700"
         />
 
-        <button 
-        onClick={handleSubmit} disabled={loading}
-        className="w-full bg-gray-900 text-white py-3 rounded-xl hover:bg-black transition-all duration-200">
+        {/* BOTÓN */}
+        <button
+          onClick={handleSubmit}
+          disabled={loading}
+          className="w-full py-3 rounded-xl font-medium bg-indigo-600 hover:bg-indigo-700 transition disabled:bg-gray-600"
+        >
           {loading ? 'Subiendo...' : 'Subir archivo'}
         </button>
+
+        {/* CONFIRMAR */}
         {confirmacionPendiente && (
           <button
-          onClick={()=> handleSubmit(true)}
-          className="w-full mt-3 bg-red-600 text-white py-3 rounded-xl hover:bg-red-700"
+            onClick={() => handleSubmit(true)}
+            className="w-full mt-3 py-3 rounded-xl bg-red-600 hover:bg-red-700"
           >
             Confirmar y Reemplazar
           </button>
         )}
+
+        {/* MENSAJE */}
         {mensaje && (
-          <p className="mt-4 text-center text-sm text-gray-700">
-          {mensaje}
-          {errores.length > 0 && (
-            <div className="mt-4 bg-red-50 border border-red-200 rounded-xl p-4">
-              <h3 className="text-red-700 font-semibold mb-2">
-                Se detectaron [errores.length] errores
-              </h3>
-              <div className="max-h-60 overflow-y-auto">
-                <table className="w-full text-sm">
-                  <thead className="text-left text-red-800 border-b">
-                    <tr>
-                      <th className="py-1">RUT</th>
-                      <th>Nombre</th>
-                      <th>Fecha</th>
-                      <th>Motivo</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {errores.map((e, i)=>(
-                      <tr key={i} className="border-b last:border-0">
-                        <td>{e.rut}</td>
-                        <td>{e.nombre}</td>
-                        <td>{formatearFecha(e.fecha)}</td>
-                        <td className="text-red-600 font-medium">{e.motivo}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )};
+          <p className="mt-4 text-sm text-center text-gray-300">
+            {mensaje}
           </p>
         )}
+
+        {/* ERRORES */}
+        {errores.length > 0 && (
+          <div className="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 p-4 max-h-60 overflow-y-auto">
+
+            <h3 className="text-red-400 font-semibold mb-2">
+              ⚠️ {errores.length} errores detectados
+            </h3>
+
+            <table className="w-full text-sm">
+              <tbody>
+                {errores.map((e, i) => (
+                  <tr key={i} className="border-b border-red-500/10">
+                    <td className="py-1 text-white">{e.rut}</td>
+                    <td className="text-gray-300">{e.nombre}</td>
+                    <td className="text-gray-400">
+                      {formatearFecha(e.fecha)}
+                    </td>
+                    <td className="text-red-400 text-xs">
+                      {e.motivo}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+          </div>
+        )}
+
       </div>
     </div>
-  );
+  </div>
+);
 }
 
 export default CargarTurnos;
